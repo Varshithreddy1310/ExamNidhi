@@ -13,4 +13,22 @@ The React Compiler is not enabled on this template because of its impact on dev 
 
 ## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and `typescript-eslint` in your project.
+
+## 🚀 Deployment on Vercel
+
+To deploy this frontend on Vercel:
+
+1.  **Project Settings**: Set the **Root Directory** to `FRONTEND/mini` (if deploying from the project root).
+2.  **Build Command**: `npm run build` (automatic).
+3.  **Output Directory**: `dist` (automatic).
+4.  **Environment Variables**: 
+    - Add `VITE_BACKEND_URL`: Set this to your deployed backend URL (e.g., `https://your-backend.onrender.com/api`).
+5.  **Routing**: The included `vercel.json` ensures that client-side routing works correctly (avoids 404 on refresh).
+
+## 🛠️ Local Development
+
+1. Create a `.env` file based on `.env.example`.
+2. Run `npm install`.
+3. Run `npm run dev`.
+

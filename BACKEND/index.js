@@ -13,9 +13,16 @@ const app = express();
 
 // 2. Middleware Configuration
 // Order is important: CORS and Cookies must come before Routes
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
     origin: function(origin, callback) {
-        if(!origin || origin.startsWith('http://localhost:')) {
+        if(!origin || allowedOrigins.some(url => url === origin || origin.startsWith(url))) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
