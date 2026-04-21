@@ -5,7 +5,7 @@ import axios from 'axios';
 // Ensure cookies are sent with every request
 axios.defaults.withCredentials = true;
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
+const backendUrl = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api').replace(/\/$/, '');
 
 if (import.meta.env.PROD && backendUrl.includes('localhost')) {
     console.error("⚠️ WARNING: Frontend is running in production but VITE_BACKEND_URL is pointing to localhost. API calls will fail.");
