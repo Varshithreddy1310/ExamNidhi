@@ -222,9 +222,12 @@ function AdminPanel() {
             </div>
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <a 
-                href={`${backendUrl.replace('/api', '')}/${paper.fileUrl.replace(/\\/g, '/')}`} 
+                href={paper.fileUrl.startsWith('http') 
+                    ? paper.fileUrl 
+                    : `${backendUrl.replace('/api', '')}/${paper.fileUrl.replace(/\\/g, '/')}`} 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                download={`${paper.title}.pdf`}
                 className="btn-primary" 
                 style={{ textDecoration: 'none' }}
               >
@@ -255,9 +258,12 @@ function AdminPanel() {
               </div>
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <a 
-                  href={`${backendUrl.replace('/api', '')}/${paper.fileUrl.replace(/\\/g, '/')}`} 
+                  href={paper.fileUrl.startsWith('http') 
+                      ? paper.fileUrl 
+                      : `${backendUrl.replace('/api', '')}/${paper.fileUrl.replace(/\\/g, '/')}`} 
                   target="_blank" 
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
+                  download={`${paper.title}.pdf`}
                   className="btn-primary" 
                   style={{ textDecoration: 'none', background: 'transparent', border: '1px solid var(--accent-primary)', color: 'var(--text-primary)' }}
                 >

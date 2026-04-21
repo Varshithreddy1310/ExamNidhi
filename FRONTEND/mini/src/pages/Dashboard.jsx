@@ -240,9 +240,12 @@ function Dashboard() {
 
                         <div style={{ marginTop: '1.5rem', display: 'flex', gap: '10px' }}>
                           <a 
-                            href={`${backendUrl.replace('/api', '')}/${paper.fileUrl.replace(/\\/g, '/')}`} 
+                            href={paper.fileUrl.startsWith('http') 
+                                ? paper.fileUrl 
+                                : `${backendUrl.replace('/api', '')}/${paper.fileUrl.replace(/\\/g, '/')}`} 
                             target="_blank" 
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
+                            download={`${paper.title}.pdf`}
                             className="btn-primary" 
                             style={{ textDecoration: 'none', flex: 1 }}
                           >

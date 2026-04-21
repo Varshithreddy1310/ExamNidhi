@@ -8,6 +8,7 @@ const paperSchema = new mongoose.Schema({
     semester: { type: String, required: true, default: "Sem 1" },        // Added to handle legacy
     year: { type: Number, required: true },
     fileUrl: { type: String, required: true }, // Path to the PDF
+    cloudinaryId: { type: String }, // For deleting from Cloudinary
     uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     contributorName: { type: String }, // Optional field for student contributions
     scholarNumber: { type: String }, // Optional field for student contributions

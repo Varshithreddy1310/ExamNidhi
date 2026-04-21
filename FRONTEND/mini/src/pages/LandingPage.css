@@ -150,14 +150,12 @@
 .hero-title {
   font-size: 5.5rem;
   font-weight: 900;
-  font-style: italic;
   line-height: 1.1;
   text-transform: uppercase;
   margin-bottom: 30px;
   letter-spacing: -2px;
   color: var(--text-primary);
   text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  transform: skewX(-5deg);
 }
 
 .hero-title .gradient-text {

@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const helmet = require('helmet');
+const compression = require('compression');
 require('dotenv').config();
 
 // 1. Import Routes
@@ -11,8 +13,12 @@ const paperRoutes = require('./routes/paperRoutes');
 
 const app = express();
 
+app.use(helmet({
+    crossOriginResourcePolicy: false, // Allow cross-origin images/files
+}));
+app.use(compression());
+
 // 2. Middleware Configuration
-// Order is important: CORS and Cookies must come before Routes
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
@@ -22,10 +28,11 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function(origin, callback) {
-        if(!origin || allowedOrigins.some(url => url === origin || origin.startsWith(url))) {
+        if (!origin || allowedOrigins.includes(origin) || allowedOrigins.some(url => origin.startsWith(url))) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            console.warn(`CORS blocked for origin: ${origin}`);
+            callback(null, false);
         }
     },
     credentials: true
@@ -50,6 +57,14 @@ mongoose.connect(process.env.MONGO_URI)
         console.error("❌ MongoDB Connection Failed:");
         console.error(err.message);
     });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error("🔥 Global Error Handler:", err.stack);
+    res.status(err.status || 500).json({
+        error: err.message || "Internal Server Error"
+    });
+});
 
 // 6. Start Server
 const PORT = process.env.PORT || 5000;

@@ -1,7 +1,6 @@
 const Paper = require('../models/Paper');
 const User = require('../models/User');
-const fs = require('fs');
-const path = require('path');
+const { cloudinary } = require('../config/cloudinary');
 
 // 1. Admin uploads a new paper
 exports.uploadPaper = async (req, res) => {
@@ -15,6 +14,7 @@ exports.uploadPaper = async (req, res) => {
             branch: branch || "Computer Science",
             semester: semester || "Sem 1",
             fileUrl: req.file.path, 
+            cloudinaryId: req.file.filename,
             uploadedBy: req.user.id,
             isVerified: true // Since only Admin uploads, we can set it to true immediately
         });
@@ -37,6 +37,7 @@ exports.studentUploadPaper = async (req, res) => {
             branch: branch || "Computer Science",
             semester: semester || "Sem 1",
             fileUrl: req.file.path, 
+            cloudinaryId: req.file.filename,
             uploadedBy: req.user.id,
             contributorName,
             scholarNumber,
@@ -120,14 +121,15 @@ exports.deletePaper = async (req, res) => {
             return res.status(404).json({ message: "Paper not found" });
         }
 
-        // Remove from file system
-        try {
-            const fullPath = path.join(__dirname, '..', paper.fileUrl);
-            if (fs.existsSync(fullPath)) {
-                fs.unlinkSync(fullPath);
+        // Remove from Cloudinary
+        if (paper.cloudinaryId) {
+            try {
+                // Try deleting as 'image' (new default) and 'raw' (legacy)
+                await cloudinary.uploader.destroy(paper.cloudinaryId, { resource_type: 'image' });
+                await cloudinary.uploader.destroy(paper.cloudinaryId, { resource_type: 'raw' });
+            } catch (e) {
+                console.error("Cloudinary deletion failed:", e);
             }
-        } catch(e) {
-            console.error("Error deleting file:", e);
         }
 
         await Paper.findByIdAndDelete(req.params.id);

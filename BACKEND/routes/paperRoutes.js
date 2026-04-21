@@ -15,10 +15,7 @@ const {
     getStats
 } = require('../controllers/paperController');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-});
+const { storage } = require('../config/cloudinary');
 const upload = multer({ storage });
 
 // --- STUDENT & ADMIN ROUTES ---

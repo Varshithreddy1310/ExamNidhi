@@ -7,6 +7,10 @@ axios.defaults.withCredentials = true;
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
 
+if (import.meta.env.PROD && backendUrl.includes('localhost')) {
+    console.error("⚠️ WARNING: Frontend is running in production but VITE_BACKEND_URL is pointing to localhost. API calls will fail.");
+}
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -52,8 +56,14 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        await axios.delete(`${backendUrl}/auth/logout`);
-        setUser(null);
+        try {
+            await axios.delete(`${backendUrl}/auth/logout`);
+        } catch (err) {
+            console.warn("Backend logout failed, clearing local state anyway:", err.message);
+        } finally {
+            setUser(null);
+            localStorage.removeItem('user');
+        }
     };
 
     return (
